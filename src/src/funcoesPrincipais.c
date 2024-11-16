@@ -33,10 +33,18 @@ int preencherGrafo(Grafo* g, FILE* fp) {
     {
         Reg* registro;
         //Print registers and increment RRN
-        ret = readRegisterSaveVertex(fp, registro, RRN);
-        Animal* animal = criarAnimal(registro->data.name, registro->data.species, registro->data.habitat, registro->data.diet, registro->data.type, registro->data.population);
-        //adicionarVertice(g, animal);
-
+        ret = readRegisterSaveVertex(fp, &registro, RRN);
+        //imprimirRegistro(registro);
+        
+        char* nomeProcurado = registro->data.name;
+        Vertice* verticeEncontrado = buscarVerticePorNome(g, nomeProcurado);
+        
+        if(verticeEncontrado == NULL) {
+            Animal* animal = criarAnimal(registro->data.name, registro->data.species, registro->data.habitat, registro->data.diet, registro->data.type, registro->data.population);
+            //imprimirAnimal(animal);
+            adicionarVertice(g, animal);
+        }
+        
         RRN++;
     }
 

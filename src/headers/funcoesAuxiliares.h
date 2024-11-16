@@ -30,7 +30,7 @@ typedef struct reg {
     Dino data;
 } Reg;
 
-Reg* criarRegistro(const char* nome, const char* especie, const char* habitat, const char* dieta, const char* tipo, const int populacao);
+Reg* criarRegistro(char* nome, char* especie, char* habitat, char* dieta, char* tipo, const int populacao);
 
 /// @brief Reads a single variable field and stores in a destination string. Reads a single field per call.
 /// @param ptrStr Pointer (string) with all/the rest of the variable fields to read.
@@ -48,7 +48,7 @@ int readRegister(FILE *fp, Reg *regPtr);
 /// @param fp Pointer to a binary file (open in reading mode).
 /// @param RRN RRN of the register to be printed.
 /// @return Returns -1 if register was removed, 2 if the record was not found in the file (reached EOF) and 0 if it was printed;
-int readRegisterSaveVertex(FILE *fp, Reg* NewReg, int RRN);
+int readRegisterSaveVertex(FILE *fp, Reg** NewReg, int RRN);
 
 /// @brief Prints a error message warning that there's a error with the sent file. 
 void printFileErrorMessage();
@@ -69,4 +69,6 @@ int checkFileConsistency(FILE* fp);
 /// @brief Remove quotes, new-lines and carriage-returns.
 /// @param str String that will be manipulated.
 void removequotes(char *str);
+void imprimirRegistro(Reg* NewReg);
+
 #endif

@@ -36,9 +36,9 @@ int main() {
         
         dinoDataBin = fopen(fileR, "rb");
 
-        Grafo* grafo = criarGrafo();
-        n = preencherGrafo(grafo, dinoDataBin);
-        //imprimirGrafo(grafo);
+        Grafo* g = criarGrafo();
+        n = preencherGrafo(g, dinoDataBin);
+        imprimirGrafo(g);
 
         fclose(dinoDataBin);
 
@@ -68,6 +68,15 @@ int main() {
     adicionarVertice(grafo, zebra);
 
     adicionarAresta(grafo, "leao", "zebra", 30);
+
+    const char* nomeProcurado = "leao";
+    Vertice* verticeEncontrado = buscarVerticePorNome(grafo, nomeProcurado);
+
+    if (verticeEncontrado != NULL) {
+        printf("Vértice encontrado: %s\n", verticeEncontrado->animal->nome);
+    } else {
+        printf("Vértice com nome '%s' não encontrado.\n", nomeProcurado);
+    }
 
     imprimirGrafo(grafo);
 

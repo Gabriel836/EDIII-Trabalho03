@@ -2,14 +2,14 @@
 #include <stdlib.h>
 #include "funcoesAuxiliares.h"
 
-Reg* criarRegistro(const char* nome, const char* especie, const char* habitat,
-                    const char* dieta, const char* tipo, const int populacao) {
-    Reg* novoRegistro = (Reg*)malloc(sizeof(Reg));
-    strncpy(novoRegistro->data.name, nome, MAX_STRING_SIZE);
-    strncpy(novoRegistro->data.species, especie, MAX_STRING_SIZE);
-    strncpy(novoRegistro->data.habitat, habitat, MAX_STRING_SIZE);
-    strncpy(novoRegistro->data.diet, dieta, MAX_STRING_SIZE);
-    strncpy(novoRegistro->data.type, tipo, MAX_STRING_SIZE);
+Reg* criarRegistro(char* nome, char* especie, char* habitat,
+                    char* dieta, char* tipo, const int populacao) {
+    Reg* novoRegistro = (Reg*)calloc(1, sizeof(Reg));
+    strcpy(novoRegistro->data.name, nome);
+    strcpy(novoRegistro->data.species, especie);
+    strcpy(novoRegistro->data.habitat, habitat);
+    strcpy(novoRegistro->data.diet, dieta);
+    strcpy(novoRegistro->data.type, tipo);
     novoRegistro->data.population = populacao;
     return novoRegistro;
 }
@@ -66,7 +66,7 @@ int readRegister(FILE *fp, Reg *regPtr)
     return 0;
 }
 
-int readRegisterSaveVertex(FILE *fp, Reg* NewReg, int RRN)
+int readRegisterSaveVertex(FILE *fp, Reg** NewReg, int RRN)
 {
     Reg reg;
     int ret;
@@ -79,8 +79,8 @@ int readRegisterSaveVertex(FILE *fp, Reg* NewReg, int RRN)
     if(ret == -1 || ret == 2) //If 'readRegister' returns a error, returns
         return ret;
     
-    NewReg = criarRegistro(reg.data.name, reg.data.species, reg.data.habitat, reg.data.diet, reg.data.type, reg.data.population);
-
+    *NewReg = criarRegistro(reg.data.name, reg.data.species, reg.data.habitat, reg.data.diet, reg.data.type, reg.data.population);
+/*
     printf("Nome: %s\n", NewReg->data.name);
     printf("Especie: %s\n", NewReg->data.species);
     if(strlen(NewReg->data.type)>0)
@@ -91,7 +91,7 @@ int readRegisterSaveVertex(FILE *fp, Reg* NewReg, int RRN)
     printf("Populacao: %d\n", NewReg->data.population);
     printf("Comida: %s", reg.data.food);
     printf("\n");
-
+*/
     return 0;
 }
 
@@ -145,4 +145,19 @@ int checkFileConsistency(FILE* fp) {
     }
 
     return 0;
+}
+
+void imprimirRegistro(Reg* NewReg) {
+    printf("Nome: %s\n", NewReg->data.name);
+    printf("Especie: %s\n", NewReg->data.species);
+    if(strlen(NewReg->data.type)>0)
+        printf("Tipo: %s\n", NewReg->data.type);
+    printf("Dieta: %s\n", NewReg->data.diet);
+    if(strlen(NewReg->data.habitat)>0)
+        printf("Lugar que habitava: %s\n", NewReg->data.habitat);
+    printf("Populacao: %d\n", NewReg->data.population);
+    printf("Comida: %s", NewReg->data.food);
+    printf("\n");
+
+    return;
 }
