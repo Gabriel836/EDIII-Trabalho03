@@ -66,4 +66,7 @@ int checkFileExistence(FILE* fp);
 /// @return Return -1 if the file is inconsistent and 0 otherwise.
 int checkFileConsistency(FILE* fp);
 
+/// @brief Remove quotes, new-lines and carriage-returns.
+/// @param str String that will be manipulated.
+void removequotes(char *str);
 #endif
