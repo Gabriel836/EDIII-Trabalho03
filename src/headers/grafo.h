@@ -1,3 +1,6 @@
+#ifndef __GRAFO__
+#define __GRAFO__
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -11,6 +14,7 @@ typedef struct Animal {
     char habitat[MAX_STR];
     char dieta[MAX_STR];
     char tipo[MAX_STR];
+    int populacao;
 } Animal;
 
 //Estrutura para representar uma aresta (conexão)
@@ -35,8 +39,10 @@ typedef struct Grafo {
 } Grafo;
 
 Grafo* criarGrafo();
-Animal* criarAnimal(const char* nome, const char* especie, const char* habitat, const char* dieta, const char* tipo);
+Animal* criarAnimal(const char* nome, const char* especie, const char* habitat, const char* dieta, const char* tipo, const int populacao);
 Vertice* criarVertice(Animal* animal);
 void adicionarVertice(Grafo* grafo, Animal* animal);
 void adicionarAresta(Grafo* grafo, const char* origem, const char* destino, int peso);
 void imprimirGrafo(Grafo* grafo);
+
+#endif
