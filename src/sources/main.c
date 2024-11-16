@@ -1,18 +1,30 @@
 #include <stdio.h>
 #include "grafo.h"
+#include "funcoesAuxiliares.h"
+#include "funcoesAnalise.h"
 
 int main() {
-    Grafo* grafo = criarGrafo();
+    char nomeArq[MAX_STR], str[MAX_STR];
+    int cmd, n;
+    Grafo *grafo;
 
-    Animal* leao = criarAnimal("leao", "gatinho gatus", "africa", "carnivoro", "gato");
-    Animal* zebra = criarAnimal("zebra", "cavalo noir", "africa", "herbivoro", "juan");
+    scanf("%s %d", nomeArq, &cmd);
 
-    adicionarVertice(grafo, leao);
-    adicionarVertice(grafo, zebra);
+    switch(cmd) {
+        case 10:
+            //codigo
+        
+        case 11:
+            //gerar grafo
+            grafo = criarGrafo();
+            scanf("%d", &n);
 
-    adicionarAresta(grafo, "leao", "zebra", 30);
-
-    imprimirGrafo(grafo);
+            for(int i = 0; i < n; i++) {
+                fgets(str, MAX_STR, stdin);
+                removequotes(str);
+                
+            }
+    }
 
     return 0;
 }

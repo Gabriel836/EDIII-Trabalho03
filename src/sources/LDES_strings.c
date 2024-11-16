@@ -58,7 +58,7 @@ int insereNoStrings(ListaString *li, char *string) {
 }
 
 //Remoção da lista
-int removeListaStrings(ListaString *li) {
+int deletaListaStrings(ListaString *li) {
     //Ponteiro da lista Nulo
     if(li == NULL) return -1;
     if(li->inicio == NULL) {
@@ -98,4 +98,14 @@ int imprimeListaStrings(ListaString *li) {
     printf("%s\n", atual->string);
 
     return 0;
+}
+
+//Verifica se a lista esta vazia
+int listaVazia(ListaString *li) {
+    //Ponteiro de lista Nulo
+    if(li == NULL) return -1;
+
+    //Lista vazia
+    if(li->n_elem = 0) return 1;
+    else return 0;
 }
