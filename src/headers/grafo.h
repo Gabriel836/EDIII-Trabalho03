@@ -45,7 +45,7 @@ Grafo* criarGrafo();
 Animal* criarAnimal(char* nome, char* especie, char* habitat, char* dieta, char* tipo,int populacao);
 Vertice* criarVertice(Animal* animal);
 void adicionarVertice(Grafo* grafo, Animal* animal);
-void adicionarAresta(Grafo* grafo, char* origem, char* destino, int peso);
+void adicionarAresta(Grafo* grafo, Vertice* predador, Vertice* presa);
 void imprimirGrafo(Grafo* grafo);
 void imprimirAnimal(const Animal* animal);
 Vertice* buscarVerticePorNome(Grafo* grafo, char* nome);

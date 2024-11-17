@@ -44,7 +44,27 @@ int preencherGrafo(Grafo* g, FILE* fp) {
             //imprimirAnimal(animal);
             adicionarVertice(g, animal);
         }
-        
+        RRN++;
+    }
+
+    ret = 0;
+    RRN = 0;
+    while(ret == 0 || ret == -1)
+    {
+        Reg* registro;
+
+        ret = readRegisterSaveVertex(fp, &registro, RRN);
+
+        char* predadorProcurado = registro->data.name;
+        char* presaProcurada = registro->data.food;
+        Vertice* predadorEncontrado = buscarVerticePorNome(g, predadorProcurado);
+        printf("predador encontrado. nome: %s end: %p", predadorEncontrado->animal->nome, predadorEncontrado);
+        Vertice* presaEncontrada = buscarVerticePorNome(g, presaProcurada);
+        printf("presa encontrada. nome: %s end: %p", presaEncontrada->animal->nome, presaEncontrada);
+
+        if(predadorEncontrado != NULL && presaEncontrada != NULL) {
+            adicionarAresta(g, predadorEncontrado, presaEncontrada);
+        }
         RRN++;
     }
 
