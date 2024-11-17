@@ -67,38 +67,50 @@ void adicionarVertice(Grafo* grafo, Animal* animal) {
     }
 }
 
-// Função para adicionar uma aresta entre dois vértices
-void adicionarAresta(Grafo* grafo, char* origem, char* destino, int peso) {
-    Vertice* vOrigem = NULL;
-    Vertice* vDestino = NULL;
+//Função para adicionar uma aresta entre dois vértices
+void adicionarAresta(Grafo* grafo, Vertice* predador, Vertice* presa) {
+    //Cria uma nova aresta e inicializa os campos
+    Aresta* novaAresta = (Aresta*)calloc(1, sizeof(Aresta));
 
-    // Busca os vértices de origem e destino
-    for (Vertice* v = grafo->listaVertices; v != NULL; v = v->prox) {
-        if (strcmp(v->animal->nome, origem) == 0) {
-            vOrigem = v;
-        }
-        if (strcmp(v->animal->nome, destino) == 0) {
-            vDestino = v;
-        }
-    }
+    novaAresta->destino = presa;
+    novaAresta->peso = presa->animal->populacao;
 
-    if (vOrigem == NULL || vDestino == NULL) {
-        printf("Erro: Vértice de origem ou destino não encontrado.\n");
+    // Atualiza os graus de entrada e saída
+    predador->grauSaida++;
+    presa->grauEntrada++;
+
+    Aresta *prox, *ant;
+
+    ant = predador->listaArestas;
+    //Vertice sem arestas
+    if(ant == NULL) {
+        predador->listaArestas = novaAresta;
+        novaAresta->prox = NULL;
         return;
     }
 
-    // Cria a nova aresta
-    Aresta* novaAresta = (Aresta*)malloc(sizeof(Aresta));
-    novaAresta->destino = vDestino; // Aponta para o vértice
-    novaAresta->peso = peso;
-    novaAresta->prox = vOrigem->listaArestas;
+    prox = ant->prox;
+    //Mudanca no primeiro nó da lista (comp nome da nova aresta e nome do primeiro nó)
+    if(strcmp(novaAresta->destino->animal->nome, ant->destino->animal->nome) <= 0) {
+        predador->listaArestas = novaAresta; //novaAresta vira inicio da lista
+        novaAresta->prox = ant; //prox de novaAresta recebe ant (antigo inicio da lista)
+        return;
+    }
 
-    // Insere na lista de adjacências do vértice de origem
-    vOrigem->listaArestas = novaAresta;
+    //Inserção do vértice, em ordem alfabética
+    while(1) {
+        if(strcmp(ant->destino->animal->nome, novaAresta->destino->animal->nome) < 0) {
+            if(prox == NULL || strcmp(novaAresta->destino->animal->nome, prox->destino->animal->nome) < 0) {
+                ant->prox = novaAresta;
+                novaAresta->prox = prox;
+                return;
+            }
+        }
+        ant = ant->prox;
+        prox = prox->prox;
+    }
 
-    // Atualiza os graus
-    vOrigem->grauSaida++;
-    vDestino->grauEntrada++;
+    return;
 }
 
 // Função para imprimir o grafo

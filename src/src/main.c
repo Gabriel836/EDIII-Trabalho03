@@ -38,7 +38,7 @@ int main() {
 
         Grafo* g = criarGrafo();
         n = preencherGrafo(g, dinoDataBin);
-        imprimirGrafo(g);
+        //imprimirGrafo(g);
 
         fclose(dinoDataBin);
 
@@ -58,7 +58,7 @@ int main() {
     default:
         break;
     }
-
+/*
     Grafo* grafo = criarGrafo();
 
     Animal* leao = criarAnimal("leao", "gatinho gatus", "africa", "carnivoro", "gato", 20);
@@ -79,6 +79,6 @@ int main() {
     }
 
     imprimirGrafo(grafo);
-
+*/
     return 0;
 }
