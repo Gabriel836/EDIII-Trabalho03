@@ -6,15 +6,15 @@
 
 #define MAX_CHAR 100
 
+typedef struct no_string {
+    char string[MAX_CHAR];
+    struct no_string *prox;
+} NoString;
+
 typedef struct Lista_strings {
     int n_elem;
     NoString *inicio;
 } ListaString;
-
-typedef struct no_string {
-    char string[MAX_CHAR];
-    NoString *prox;
-} NoString;
 
 int criaListaStrings(ListaString *li);
 int insereNoStrings(ListaString *li, char *string);

@@ -37,10 +37,34 @@ Vertice* criarVertice(Animal* animal) {
 void adicionarVertice(Grafo* grafo, Animal* animal) {
     // Cria o novo vértice
     Vertice* novoVertice = criarVertice(animal);
+    Vertice *prox, *ant;
 
-    // Insere na lista de vértices
-    novoVertice->prox = grafo->listaVertices;
-    grafo->listaVertices = novoVertice;
+    ant = grafo->listaVertices;
+    //Grafo vazio  
+    if(ant == NULL) {
+        grafo->listaVertices = novoVertice;
+        novoVertice->prox = NULL;
+        return;
+    }
+    prox = ant->prox;
+    //Mudanca no primeiro nó da lista
+    if(strcmp(novoVertice->animal->nome, ant->animal->nome) <= 0) {
+        grafo->listaVertices = novoVertice;
+        novoVertice->prox = ant;
+        return;
+    }
+    //Inserção do vértice, em ordem alfabética
+    while(1) {
+        if(strcmp(ant->animal->nome, novoVertice->animal->nome) < 0) {
+            if(prox == NULL || strcmp(novoVertice->animal->nome, prox->animal->nome) < 0) {
+                ant->prox = novoVertice;
+                novoVertice->prox = prox;
+                return;
+            }
+        }
+        ant = ant->prox;
+        prox = prox->prox;
+    }
 }
 
 // Função para adicionar uma aresta entre dois vértices

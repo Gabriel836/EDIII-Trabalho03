@@ -32,7 +32,7 @@ void listaPredadores(Grafo *grafo, char* presa) {
         //Verificamos se a presa esta na lista de presas de cada predador
         while(aresta_atual != NULL) {
             //Caso este seja um predador de "presa", é inserido em uma LDES
-            if(!strcmp(aresta_atual->destino->nome, presa)) {
+            if(!strcmp(aresta_atual->destino->animal->nome, presa)) {
                 insereNoStrings(lista_predadores, vert_atual->animal->nome);
                 break;
             }
