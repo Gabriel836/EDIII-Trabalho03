@@ -9,6 +9,7 @@
 typedef struct no_string {
     char string[MAX_CHAR];
     struct no_string *prox;
+    int visitado;
 } NoString;
 
 typedef struct Lista_strings {
@@ -21,3 +22,4 @@ int insereNoStrings(ListaString *li, char *string);
 int deletaListaStrings(ListaString *li);
 int imprimeListaStrings(ListaString *li);
 int listaVazia(ListaString *li);
+int presenteNaLista(ListaString *li, char *str);

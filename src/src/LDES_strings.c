@@ -24,6 +24,7 @@ int insereNoStrings(ListaString *li, char *string) {
     NoString *ptr_no = (NoString*)malloc(sizeof(NoString));
     ptr_no->prox = NULL;
     strcpy(ptr_no, string);
+    ptr_no->visitado = -1;
 
     //Ponteiros auxiliares
     NoString *ant, *prox;
@@ -108,4 +109,15 @@ int listaVazia(ListaString *li) {
     //Lista vazia
     if(li->n_elem = 0) return 1;
     else return 0;
+}
+
+//Verifica se a string esta na lista
+int presenteNaLista(ListaString *li, char *str) {
+    NoString *atual = li->inicio;
+
+    while(atual != NULL) {
+        if(!strcmp(atual->string, str)) return 1;
+        atual = atual->prox;
+    }
+    return 0;
 }

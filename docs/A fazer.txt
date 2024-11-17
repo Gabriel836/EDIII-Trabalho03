@@ -1,0 +1,3 @@
+A fazer:
+
+1. Função [12]: Modificar o struct do TAD LDES para conter o campo "visitado". Inteiro.
