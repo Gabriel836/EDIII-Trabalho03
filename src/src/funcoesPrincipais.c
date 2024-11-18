@@ -45,9 +45,12 @@ int preencherGrafo(Grafo* g, FILE* fp) {
         char* nomeProcurado = registro->data.name;
         verticeEncontrado = NULL;
         buscarVerticePorNome(g, nomeProcurado, &verticeEncontrado);
-        
+
         if(verticeEncontrado == NULL) {
             Animal* animal = criarAnimal(registro->data.name, registro->data.species, registro->data.habitat, registro->data.diet, registro->data.type, registro->data.population);
+            //if (strcmp("equisetum arvense", registro->data.name) == 0) {
+            //    printf("ARVORE DO CARALHO. %s pop: %d\n", registro->data.name, registro->data.population);
+            //}
             //imprimirAnimal(animal);
             adicionarVertice(g, animal);
         }
@@ -69,6 +72,8 @@ int preencherGrafo(Grafo* g, FILE* fp) {
 
         ret = readRegisterSaveVertex(fp, &registro, RRN);
 
+        int populacaoAresta = registro->data.population;
+
         if(ret == -1) {
             RRN++;
             continue;
@@ -80,8 +85,7 @@ int preencherGrafo(Grafo* g, FILE* fp) {
 
         buscarVerticePorNome(g, predadorProcurado, &predadorEncontrado);
         buscarVerticePorNome(g, presaProcurada, &presaEncontrada);
-
-
+        
         // Caso a presa não possua registro no binario, cria um vertice pra ela.
         if(presaEncontrada == NULL) {
             Animal* presa = criarAnimal(presaProcurada, "\0", "\0", "\0", "\0", 0);
@@ -90,7 +94,7 @@ int preencherGrafo(Grafo* g, FILE* fp) {
         }
 
         if(predadorEncontrado != NULL && presaEncontrada != NULL) {
-            adicionarAresta(g, predadorEncontrado, presaEncontrada);
+            adicionarAresta(g, predadorEncontrado, presaEncontrada, populacaoAresta);
         }
         RRN++;
     }
