@@ -10,14 +10,16 @@
 int contagemCiclos(Grafo *grafo) {
     int nCiclos = 0;
 
-
+    return nCiclos;
 }
 
 
 void DFS(Vertice *vert, int *nCiclos) {
     Vertice *prox = vert->listaArestas->destino;
-    
+
+    /*
     while(1) {
         if()
     }
+    */
 }
