@@ -47,6 +47,7 @@ Vertice* criarVertice(Animal* animal);
 void adicionarVertice(Grafo* grafo, Animal* animal);
 void adicionarAresta(Grafo* grafo, Vertice* predador, Vertice* presa);
 void imprimirGrafo(Grafo* grafo);
+void imprimirGrafoSintetico(Grafo *grafo);
 void imprimirAnimal(const Animal* animal);
 void buscarVerticePorNome(Grafo* grafo, char* nome, Vertice **ptr_vert);
 

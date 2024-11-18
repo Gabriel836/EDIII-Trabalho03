@@ -29,6 +29,7 @@ int preencherGrafo(Grafo* g, FILE* fp) {
     }
 
     Reg* registro;
+    Vertice* verticeEncontrado;
     ret = 0;
     while(ret == 0 || ret == -1) //while there is registers (-1 if removed or 0 if not removed)
     {
@@ -42,7 +43,7 @@ int preencherGrafo(Grafo* g, FILE* fp) {
         //imprimirRegistro(registro);
         
         char* nomeProcurado = registro->data.name;
-        Vertice* verticeEncontrado;
+        verticeEncontrado = NULL;
         buscarVerticePorNome(g, nomeProcurado, &verticeEncontrado);
         
         if(verticeEncontrado == NULL) {
@@ -60,7 +61,6 @@ int preencherGrafo(Grafo* g, FILE* fp) {
     char predadorProcurado[MAX_STR], presaProcurada[MAX_STR];
     Vertice *predadorEncontrado, *presaEncontrada;
 
-    printf("arestas\n");
     while(ret == 0 || ret == -1)
     {
 
@@ -69,30 +69,25 @@ int preencherGrafo(Grafo* g, FILE* fp) {
 
         ret = readRegisterSaveVertex(fp, &registro, RRN);
 
-        printf("\nimprimindo registro\n");
-        imprimirRegistro(registro);
-
         if(ret == -1) {
             RRN++;
             continue;
         }
+        else if(ret == 2) break;
+        
         strcpy(predadorProcurado, registro->data.name);
         strcpy(presaProcurada, registro->data.food);
-
-        printf("valores strcpy: predador: %s, presa: %s\n", predadorProcurado, presaProcurada);
 
         buscarVerticePorNome(g, predadorProcurado, &predadorEncontrado);
         buscarVerticePorNome(g, presaProcurada, &presaEncontrada);
 
-        printf("Predador encontrado. nome %s\n", predadorEncontrado->animal->nome);
 
-        // Caso a presa não possua registro no binario
+        // Caso a presa não possua registro no binario, cria um vertice pra ela.
         if(presaEncontrada == NULL) {
             Animal* presa = criarAnimal(presaProcurada, "\0", "\0", "\0", "\0", 0);
             adicionarVertice(g, presa);
             buscarVerticePorNome(g, presaProcurada, &presaEncontrada);
         }
-        printf("Presa encontrada. nome %s\n", presaEncontrada->animal->nome);
 
         if(predadorEncontrado != NULL && presaEncontrada != NULL) {
             adicionarAresta(g, predadorEncontrado, presaEncontrada);

@@ -99,7 +99,7 @@ void adicionarAresta(Grafo* grafo, Vertice* predador, Vertice* presa) {
         return;
     }
 
-    //Inserção do vértice, em ordem alfabética
+    //Inserção da aresta, em ordem alfabética
     while(1) {
         if(strcmp(ant->destino->animal->nome, novaAresta->destino->animal->nome) < 0) {
             if(prox == NULL || strcmp(novaAresta->destino->animal->nome, prox->destino->animal->nome) < 0) {
@@ -117,20 +117,43 @@ void adicionarAresta(Grafo* grafo, Vertice* predador, Vertice* presa) {
 
 // Função para imprimir o grafo
 void imprimirGrafo(Grafo* grafo) {
-    for (Vertice* v = grafo->listaVertices; v != NULL; v = v->prox) {
+    Vertice *v;
+    Aresta *a;
+    for (v = grafo->listaVertices; v != NULL; v = v->prox) {
         printf("Animal: %s\n", v->animal->nome);
         printf("  Arestas:");
-        for (Aresta* a = v->listaArestas; a != NULL; a = a->prox) {
+        for (a = v->listaArestas; a != NULL; a = a->prox) {
             printf(" -> %s (peso: %d)", a->destino->animal->nome, a->peso);
         }
         printf("\n");
     }
 }
 
+void imprimirGrafoSintetico(Grafo *grafo) {
+    Vertice *v;
+    Aresta *a;
+    for (v = grafo->listaVertices; v != NULL; v = v->prox) {
+        for(a = v->listaArestas; a != NULL; a = a->prox) {
+            printf("%s %s %s %s %s %d %d %d %s %d\n",
+            v->animal->nome,
+            v->animal->especie,
+            v->animal->habitat,
+            v->animal->dieta,
+            v->animal->tipo,
+            v->grauEntrada,
+            v->grauSaida,
+            v->grauEntrada+v->grauSaida,
+            a->destino->animal->nome,
+            v->animal->populacao);
+        }
+    }
+}
+
 //Função para buscar um vértice pelo nome do animal
 void buscarVerticePorNome(Grafo* grafo, char* nome, Vertice **ptr_vert) {
     if (grafo == NULL || grafo->listaVertices == NULL) {
-        return NULL; //Grafo vazio ou inválido
+        *ptr_vert = NULL; //Grafo vazio ou inválido
+        return;
     }
 
     Vertice* v = grafo->listaVertices;
@@ -143,7 +166,7 @@ void buscarVerticePorNome(Grafo* grafo, char* nome, Vertice **ptr_vert) {
         v = v->prox;
     }
 
-    return NULL; // Não encontrou o vértice
+    return; // Não encontrou o vértice
 }
 
 void imprimirAnimal(const Animal* animal) {

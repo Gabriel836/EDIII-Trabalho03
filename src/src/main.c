@@ -35,11 +35,10 @@ int main() {
     case 10:
         
         dinoDataBin = fopen(fileR, "rb");
-        printf("%s\n", fileR);
 
         Grafo* g = criarGrafo();
         n = preencherGrafo(g, dinoDataBin);
-        //imprimirGrafo(g);
+        imprimirGrafoSintetico(g);
 
         fclose(dinoDataBin);
 
