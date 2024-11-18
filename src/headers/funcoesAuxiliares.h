@@ -8,6 +8,7 @@
 #define N_DELIMITERS 6
 
 #include <stdio.h>
+#include "grafo.h"
 
 /// @brief Type that represents the fixed and variable data of a species.
 typedef struct dino {
@@ -30,7 +31,7 @@ typedef struct reg {
     Dino data;
 } Reg;
 
-Reg* criarRegistro(char* nome, char* especie, char* habitat, char* dieta, char* tipo, const int populacao);
+Reg* criarRegistro(char* nome, char* especie, char* habitat, char* dieta, char* food, char* tipo, const int populacao);
 
 /// @brief Reads a single variable field and stores in a destination string. Reads a single field per call.
 /// @param ptrStr Pointer (string) with all/the rest of the variable fields to read.
@@ -70,5 +71,9 @@ int checkFileConsistency(FILE* fp);
 /// @param str String that will be manipulated.
 void removequotes(char *str);
 void imprimirRegistro(Reg* NewReg);
+
+/// @brief Prints graph vertex.
+/// @param g Graph pointer
+int imprimeVertices(Grafo *g);
 
 #endif

@@ -28,16 +28,22 @@ int preencherGrafo(Grafo* g, FILE* fp) {
         return -1;
     }
 
+    Reg* registro;
     ret = 0;
     while(ret == 0 || ret == -1) //while there is registers (-1 if removed or 0 if not removed)
     {
-        Reg* registro;
         //Print registers and increment RRN
         ret = readRegisterSaveVertex(fp, &registro, RRN);
+        if(ret == -1) {
+            RRN++;
+            continue;
+        }
+        else if(ret == 2) break;
         //imprimirRegistro(registro);
         
         char* nomeProcurado = registro->data.name;
-        Vertice* verticeEncontrado = buscarVerticePorNome(g, nomeProcurado);
+        Vertice* verticeEncontrado;
+        buscarVerticePorNome(g, nomeProcurado, &verticeEncontrado);
         
         if(verticeEncontrado == NULL) {
             Animal* animal = criarAnimal(registro->data.name, registro->data.species, registro->data.habitat, registro->data.diet, registro->data.type, registro->data.population);
@@ -47,20 +53,46 @@ int preencherGrafo(Grafo* g, FILE* fp) {
         RRN++;
     }
 
+    //imprimeVertices(g);
+
     ret = 0;
     RRN = 0;
+    char predadorProcurado[MAX_STR], presaProcurada[MAX_STR];
+    Vertice *predadorEncontrado, *presaEncontrada;
+
+    printf("arestas\n");
     while(ret == 0 || ret == -1)
     {
-        Reg* registro;
+
+        predadorEncontrado = NULL;
+        presaEncontrada = NULL;
 
         ret = readRegisterSaveVertex(fp, &registro, RRN);
 
-        char* predadorProcurado = registro->data.name;
-        char* presaProcurada = registro->data.food;
-        Vertice* predadorEncontrado = buscarVerticePorNome(g, predadorProcurado);
-        printf("predador encontrado. nome: %s end: %p", predadorEncontrado->animal->nome, predadorEncontrado);
-        Vertice* presaEncontrada = buscarVerticePorNome(g, presaProcurada);
-        printf("presa encontrada. nome: %s end: %p", presaEncontrada->animal->nome, presaEncontrada);
+        printf("\nimprimindo registro\n");
+        imprimirRegistro(registro);
+
+        if(ret == -1) {
+            RRN++;
+            continue;
+        }
+        strcpy(predadorProcurado, registro->data.name);
+        strcpy(presaProcurada, registro->data.food);
+
+        printf("valores strcpy: predador: %s, presa: %s\n", predadorProcurado, presaProcurada);
+
+        buscarVerticePorNome(g, predadorProcurado, &predadorEncontrado);
+        buscarVerticePorNome(g, presaProcurada, &presaEncontrada);
+
+        printf("Predador encontrado. nome %s\n", predadorEncontrado->animal->nome);
+
+        // Caso a presa não possua registro no binario
+        if(presaEncontrada == NULL) {
+            Animal* presa = criarAnimal(presaProcurada, "\0", "\0", "\0", "\0", 0);
+            adicionarVertice(g, presa);
+            buscarVerticePorNome(g, presaProcurada, &presaEncontrada);
+        }
+        printf("Presa encontrada. nome %s\n", presaEncontrada->animal->nome);
 
         if(predadorEncontrado != NULL && presaEncontrada != NULL) {
             adicionarAresta(g, predadorEncontrado, presaEncontrada);

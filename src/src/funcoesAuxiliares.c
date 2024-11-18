@@ -1,15 +1,17 @@
 #include <string.h>
 #include <stdlib.h>
+#include "grafo.h"
 #include "funcoesAuxiliares.h"
 
 Reg* criarRegistro(char* nome, char* especie, char* habitat,
-                    char* dieta, char* tipo, const int populacao) {
+                    char* dieta, char* food, char* tipo, const int populacao) {
     Reg* novoRegistro = (Reg*)calloc(1, sizeof(Reg));
     strcpy(novoRegistro->data.name, nome);
     strcpy(novoRegistro->data.species, especie);
     strcpy(novoRegistro->data.habitat, habitat);
     strcpy(novoRegistro->data.diet, dieta);
     strcpy(novoRegistro->data.type, tipo);
+    strcpy(novoRegistro->data.food, food);
     novoRegistro->data.population = populacao;
     return novoRegistro;
 }
@@ -37,7 +39,7 @@ int readVariableFields(char* ptrStr, char *ptrDest)
 
 int readRegister(FILE *fp, Reg *regPtr)
 {
-    char regBuff[REGISTER_SIZE], *ptrStr;
+    char regBuff[REGISTER_SIZE] = "\0", *ptrStr;
 
     if(fread(&(regPtr->removed), sizeof(char), 1, fp)<=0) //If 'fread' returns 0 (EOF), the register was not found
         return 2; //returns
@@ -79,7 +81,7 @@ int readRegisterSaveVertex(FILE *fp, Reg** NewReg, int RRN)
     if(ret == -1 || ret == 2) //If 'readRegister' returns a error, returns
         return ret;
     
-    *NewReg = criarRegistro(reg.data.name, reg.data.species, reg.data.habitat, reg.data.diet, reg.data.type, reg.data.population);
+    *NewReg = criarRegistro(reg.data.name, reg.data.species, reg.data.habitat, reg.data.diet, reg.data.food, reg.data.type, reg.data.population);
 /*
     printf("Nome: %s\n", NewReg->data.name);
     printf("Especie: %s\n", NewReg->data.species);
@@ -148,6 +150,7 @@ int checkFileConsistency(FILE* fp) {
 }
 
 void imprimirRegistro(Reg* NewReg) {
+    printf("==========================\n");
     printf("Nome: %s\n", NewReg->data.name);
     printf("Especie: %s\n", NewReg->data.species);
     if(strlen(NewReg->data.type)>0)
@@ -157,7 +160,26 @@ void imprimirRegistro(Reg* NewReg) {
         printf("Lugar que habitava: %s\n", NewReg->data.habitat);
     printf("Populacao: %d\n", NewReg->data.population);
     printf("Comida: %s", NewReg->data.food);
+    printf("\n==========================\n");
     printf("\n");
 
     return;
+}
+
+int imprimeVertices(Grafo *g) {
+    Vertice *atual;
+
+    printf("Imprimindo Grafo:\n");
+
+    if(g->listaVertices == NULL) {
+        printf("Grafo vazio\n");
+        return -1;
+    }
+
+    atual = g->listaVertices;
+    while(atual != NULL) {
+        printf("%s\n", atual->animal->nome);
+        atual = atual->prox;
+    }
+    return 0;
 }

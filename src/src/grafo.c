@@ -46,24 +46,26 @@ void adicionarVertice(Grafo* grafo, Animal* animal) {
         novoVertice->prox = NULL;
         return;
     }
-    prox = ant->prox;
     //Mudanca no primeiro nó da lista
-    if(strcmp(novoVertice->animal->nome, ant->animal->nome) <= 0) {
+    else if(strcmp(novoVertice->animal->nome, ant->animal->nome) <= 0) {
         grafo->listaVertices = novoVertice;
         novoVertice->prox = ant;
         return;
     }
     //Inserção do vértice, em ordem alfabética
-    while(1) {
-        if(strcmp(ant->animal->nome, novoVertice->animal->nome) < 0) {
-            if(prox == NULL || strcmp(novoVertice->animal->nome, prox->animal->nome) < 0) {
-                ant->prox = novoVertice;
-                novoVertice->prox = prox;
-                return;
+    else {
+        prox = ant->prox;
+        while(1) {
+            if(strcmp(ant->animal->nome, novoVertice->animal->nome) < 0) {
+                if(prox == NULL || strcmp(novoVertice->animal->nome, prox->animal->nome) < 0) {
+                    ant->prox = novoVertice;
+                    novoVertice->prox = prox;
+                    return;
+                }
             }
+            ant = ant->prox;
+            prox = prox->prox;
         }
-        ant = ant->prox;
-        prox = prox->prox;
     }
 }
 
@@ -126,16 +128,19 @@ void imprimirGrafo(Grafo* grafo) {
 }
 
 //Função para buscar um vértice pelo nome do animal
-Vertice* buscarVerticePorNome(Grafo* grafo, char* nome) {
+void buscarVerticePorNome(Grafo* grafo, char* nome, Vertice **ptr_vert) {
     if (grafo == NULL || grafo->listaVertices == NULL) {
         return NULL; //Grafo vazio ou inválido
     }
 
+    Vertice* v = grafo->listaVertices;
     //Percorre a lista de vértices
-    for (Vertice* v = grafo->listaVertices; v != NULL; v = v->prox) {
+    while (v != NULL) {
         if (strcmp(v->animal->nome, nome) == 0) {
-            return v; //Retorna o endereço do vértice se encontrou
+            *ptr_vert = v;
+            return;
         }
+        v = v->prox;
     }
 
     return NULL; // Não encontrou o vértice
