@@ -76,4 +76,9 @@ void imprimirRegistro(Reg* NewReg);
 /// @param g Graph pointer
 int imprimeVertices(Grafo *g);
 
+
+/// @brief Extracts names from commnd [11] input.
+/// @param in Input string.
+/// @param out Output string.
+void extraiNomes(char* in, char* out);
 #endif

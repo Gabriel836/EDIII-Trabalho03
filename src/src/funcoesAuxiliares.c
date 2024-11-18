@@ -183,3 +183,33 @@ int imprimeVertices(Grafo *g) {
     }
     return 0;
 }
+
+//Extrai nomes da entrada do comando [11]
+void extraiNomes(char* in, char* out) {
+    char c;
+    int i = 0, j = 0;
+
+    c = in[0];
+    while(c != '\"') {
+        i++;
+        c = in[i];
+    }
+    while (c != '\0') {
+        if(c == '\"') {
+            i++;
+            c = in[i];
+            do {
+                out[j] = c;
+                i++;
+                j++;
+                c = in[i];
+            }
+            while(c != '\"');
+            out[j] = '#';
+            j++;
+        }
+        i++;
+        c = in[i];
+    }
+    out[j] = '\0';
+}

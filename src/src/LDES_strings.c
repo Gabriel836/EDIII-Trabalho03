@@ -3,15 +3,13 @@
 #include <string.h>
 #include "LDES_strings.h"
 
-int criaListaStrings(ListaString *li) {
+ListaString* criaListaStrings() {
+    ListaString *li;
     li = (ListaString*)malloc(sizeof(ListaString));
 
-    if(li != NULL) {
-        li->inicio = NULL;
-        li->n_elem = 0;
-        return 0;
-    }
-    else return -1;
+    li->inicio = NULL;
+    li->n_elem = 0;
+    return li;
 }
 
 //Inserção ordenada na lista encadeada
@@ -23,7 +21,7 @@ int insereNoStrings(ListaString *li, char *string) {
     //Criando no
     NoString *ptr_no = (NoString*)malloc(sizeof(NoString));
     ptr_no->prox = NULL;
-    strcpy(ptr_no, string);
+    strcpy(ptr_no->string, string);
     ptr_no->visitado = -1;
 
     //Ponteiros auxiliares
@@ -79,6 +77,7 @@ int deletaListaStrings(ListaString *li) {
     while(atual != NULL);
 
     free(li);
+
     return 0;
 }
 
@@ -107,7 +106,7 @@ int listaVazia(ListaString *li) {
     if(li == NULL) return -1;
 
     //Lista vazia
-    if(li->n_elem = 0) return 1;
+    if(li->n_elem == 0) return 1;
     else return 0;
 }
 

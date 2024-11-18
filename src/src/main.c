@@ -4,10 +4,13 @@ Gabriel Dezejácomo Maruschi - 14571525
 */
 
 #include <stdio.h>
+#include <string.h>
 #include "funcoesPrincipais.h"
 #include "grafo.h"
+#include "funcoesAnalise.h"
+#include "funcoesAuxiliares.h"
 
-#define MAX_INPUT 250
+#define MAX_INPUT 300
 
 int main() {
 
@@ -30,20 +33,26 @@ int main() {
     char *field, *value;
     int n, size;
 
+    dinoDataBin = fopen(fileR, "rb");
+    Grafo* g = criarGrafo();
+    n = preencherGrafo(g, dinoDataBin);
+
     switch (cmd)
     {
     case 10:
-        
-        dinoDataBin = fopen(fileR, "rb");
 
-        Grafo* g = criarGrafo();
-        n = preencherGrafo(g, dinoDataBin);
         imprimirGrafoSintetico(g);
-
-        fclose(dinoDataBin);
 
         break;
     case 11:
+        char conjuntoBuscas[MAX_INPUT];
+        
+        extraiNomes(buff, conjuntoBuscas);
+        value = strtok(conjuntoBuscas, "#");
+        while(value != NULL) {
+            listaPredadores(g, value);
+            value = strtok(NULL, "#");
+        }
 
         break;
     case 12:
@@ -58,6 +67,7 @@ int main() {
     default:
         break;
     }
+    fclose(dinoDataBin);
 /*
     Grafo* grafo = criarGrafo();
 

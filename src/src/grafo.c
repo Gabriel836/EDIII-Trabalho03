@@ -133,6 +133,7 @@ void imprimirGrafoSintetico(Grafo *grafo) {
     Vertice *v;
     Aresta *a;
     for (v = grafo->listaVertices; v != NULL; v = v->prox) {
+        if(v->animal->populacao == -1) continue;
         for(a = v->listaArestas; a != NULL; a = a->prox) {
             printf("%s %s %s %s %s %d %d %d %s %d\n",
             v->animal->nome,
