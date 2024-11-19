@@ -70,12 +70,12 @@ void adicionarVertice(Grafo* grafo, Animal* animal) {
 }
 
 //Função para adicionar uma aresta entre dois vértices
-void adicionarAresta(Grafo* grafo, Vertice* predador, Vertice* presa) {
+void adicionarAresta(Grafo* grafo, Vertice* predador, Vertice* presa, int peso) {
     //Cria uma nova aresta e inicializa os campos
     Aresta* novaAresta = (Aresta*)calloc(1, sizeof(Aresta));
 
     novaAresta->destino = presa;
-    novaAresta->peso = presa->animal->populacao;
+    novaAresta->peso = peso;
 
     // Atualiza os graus de entrada e saída
     predador->grauSaida++;
@@ -145,7 +145,7 @@ void imprimirGrafoSintetico(Grafo *grafo) {
             v->grauSaida,
             v->grauEntrada+v->grauSaida,
             a->destino->animal->nome,
-            v->animal->populacao);
+            a->peso);
         }
     }
 }

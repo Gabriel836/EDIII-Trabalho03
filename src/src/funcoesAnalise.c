@@ -42,7 +42,7 @@ void listaPredadores(Grafo *grafo, char* presa) {
     }
 
     //Imprimindo resultados
-    if(listaVazia(lista_predadores)) printf("Registro inexistente.\n");
+    if(listaVazia(lista_predadores)) printf("Registro Inexistente.\n\n");
     else {
         printf("%s: ", presa);
         imprimeListaStrings(lista_predadores);
