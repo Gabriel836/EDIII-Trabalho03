@@ -18,12 +18,12 @@ int insereNoStrings(ListaString *li, char *string) {
     //Ponteiro da lista Nulo
     if(li == NULL) return -1;
 
+    if(presenteNaLista(li, string) != NULL) return 0;
+
     //Criando no
     NoString *ptr_no = (NoString*)malloc(sizeof(NoString));
     ptr_no->prox = NULL;
     strcpy(ptr_no->string, string);
-    ptr_no->visitado = -1;
-
     //Ponteiros auxiliares
     NoString *ant, *prox;
 
@@ -40,14 +40,12 @@ int insereNoStrings(ListaString *li, char *string) {
         }
         else {
             while(1) {
-                if(strcmp(ant->string, ptr_no->string) < 0) {
-                    if(prox == NULL || strcmp(ptr_no->string, prox->string) < 0) {
-                        ant->prox = ptr_no;
-                        ptr_no->prox = prox;
-                        break;
-                    }
+                if(prox == NULL || strcmp(ptr_no->string, prox->string) < 0) {
+                    ant->prox = ptr_no;
+                    ptr_no->prox = prox;
+                    break;
                 }
-                ant = prox;
+                ant = ant->prox;
                 prox = prox->prox;
             }
         }
@@ -100,6 +98,7 @@ int imprimeListaStrings(ListaString *li) {
     return 0;
 }
 
+
 //Verifica se a lista esta vazia
 int listaVazia(ListaString *li) {
     //Ponteiro de lista Nulo
@@ -111,12 +110,12 @@ int listaVazia(ListaString *li) {
 }
 
 //Verifica se a string esta na lista
-int presenteNaLista(ListaString *li, char *str) {
+NoString* presenteNaLista(ListaString *li, char *str) {
     NoString *atual = li->inicio;
 
     while(atual != NULL) {
-        if(!strcmp(atual->string, str)) return 1;
+        if(!strcmp(atual->string, str)) return atual;
         atual = atual->prox;
     }
-    return 0;
+    return NULL;
 }

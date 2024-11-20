@@ -28,6 +28,7 @@ Vertice* criarVertice(Animal* animal) {
     novoVertice->animal = animal;
     novoVertice->grauEntrada = 0;
     novoVertice->grauSaida = 0;
+    novoVertice->visitado = 0;
     novoVertice->listaArestas = NULL;
     novoVertice->prox = NULL;
     return novoVertice;

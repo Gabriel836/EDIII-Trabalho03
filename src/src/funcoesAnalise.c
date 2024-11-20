@@ -15,6 +15,7 @@ void listaPredadores(Grafo *grafo, char* presa) {
     }
 
     ListaString *lista_predadores;
+
     lista_predadores = criaListaStrings();
 
     Vertice* vert_atual = grafo->listaVertices;

@@ -32,6 +32,8 @@ typedef struct Vertice {
     Animal* animal;
     int grauEntrada;
     int grauSaida;
+    int visitado;
+    int tempo;
     Aresta* listaArestas; // Lista encadeada de arestas
     struct Vertice* prox;
 } Vertice;

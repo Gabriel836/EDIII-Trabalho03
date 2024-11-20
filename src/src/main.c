@@ -9,8 +9,10 @@ Gabriel Dezejácomo Maruschi - 14571525
 #include "grafo.h"
 #include "funcoesAnalise.h"
 #include "funcoesAuxiliares.h"
+#include "DFS.h"
 
 #define MAX_INPUT 300
+
 
 int main() {
 
@@ -26,7 +28,7 @@ int main() {
     cmdBuff = strtok(buff, " ");
     specsBuff = strtok(NULL, " ");
 
-    int cmd = strtol(cmdBuff, NULL, 10);
+    int k, cmd = strtol(cmdBuff, NULL, 10);
 
     char* fileR = specsBuff;
     char* nBuff;
@@ -56,6 +58,9 @@ int main() {
 
         break;
     case 12:
+
+        k = contagemCiclos(g);
+        printf("Quantidade de ciclos: %d\n", k);
 
         break;
     case 13:
