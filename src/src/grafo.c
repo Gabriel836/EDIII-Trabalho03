@@ -9,6 +9,31 @@ Grafo* criarGrafo() {
     return grafo;
 }
 
+Grafo* inverteGrafo(Grafo* g) {
+    Vertice *v, *novaOrigem, *novoDestino;
+    Aresta *a;
+    Animal *copiaO, *copiaD;
+    Grafo* g_inv;
+
+    char nome[MAX_STR];
+
+    for(v = g->listaVertices; v != NULL; v = v->prox) {
+
+        copiaO = copiaAnimal(v->animal);
+        novoDestino = adicionarVertice(g_inv, copiaO);
+
+        for(a = v->listaArestas; a != NULL; a = a->prox) {
+
+            copiaD = copiaAnimal(a->destino->animal);
+            novaOrigem = adicionarVertice(g_inv, copiaD);
+
+            adicionarAresta(g_inv, novaOrigem, novoDestino, novoDestino->animal->populacao);
+        }
+    }
+    return g_inv;
+}
+
+
 // Função para criar um novo animal
 Animal* criarAnimal(char* nome, char* especie, char* habitat,
                     char* dieta, char* tipo, int populacao) {
@@ -20,6 +45,20 @@ Animal* criarAnimal(char* nome, char* especie, char* habitat,
     strcpy(novoAnimal->tipo, tipo);
     novoAnimal->populacao = populacao;
     return novoAnimal;
+}
+
+Animal* copiaAnimal(Animal* original) {
+    Animal* copia;
+    copia = criarAnimal(
+        original->nome,
+        original->especie,
+        original->habitat,
+        original->dieta,
+        original->tipo,
+        original->populacao
+    );
+
+    return copia;
 }
 
 // Função para criar um novo vértice
@@ -35,7 +74,7 @@ Vertice* criarVertice(Animal* animal) {
 }
 
 // Função para adicionar um vértice ao grafo
-void adicionarVertice(Grafo* grafo, Animal* animal) {
+Vertice* adicionarVertice(Grafo* grafo, Animal* animal) {
     // Cria o novo vértice
     Vertice* novoVertice = criarVertice(animal);
     Vertice *prox, *ant;
@@ -45,13 +84,11 @@ void adicionarVertice(Grafo* grafo, Animal* animal) {
     if(ant == NULL) {
         grafo->listaVertices = novoVertice;
         novoVertice->prox = NULL;
-        return;
     }
     //Mudanca no primeiro nó da lista
     else if(strcmp(novoVertice->animal->nome, ant->animal->nome) <= 0) {
         grafo->listaVertices = novoVertice;
         novoVertice->prox = ant;
-        return;
     }
     //Inserção do vértice, em ordem alfabética
     else {
@@ -68,6 +105,7 @@ void adicionarVertice(Grafo* grafo, Animal* animal) {
             prox = prox->prox;
         }
     }
+    return novoVertice;
 }
 
 //Função para adicionar uma aresta entre dois vértices

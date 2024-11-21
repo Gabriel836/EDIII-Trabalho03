@@ -34,7 +34,7 @@ void listaPredadores(Grafo *grafo, char* presa) {
         while(aresta_atual != NULL) {
             //Caso este seja um predador de "presa", é inserido em uma LDES
             if(!strcmp(aresta_atual->destino->animal->nome, presa)) {
-                insereNoStrings(lista_predadores, vert_atual->animal->nome);
+                insereNoStringsOrdenado(lista_predadores, vert_atual->animal->nome);
                 break;
             }
             aresta_atual = aresta_atual->prox;

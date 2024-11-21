@@ -5,5 +5,5 @@
 #include "LDES_strings.h"
 
 
-int contagemCiclos(Grafo *grafo);
-void DFS(Vertice *v, int *counter, int *inf, int *ciclos);
+int contagemCiclos(Grafo *grafo, int *comp);
+void DFS(Vertice *v, int *counter, int *pos, int *inf, int *ciclos);

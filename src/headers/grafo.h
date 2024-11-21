@@ -33,7 +33,7 @@ typedef struct Vertice {
     int grauEntrada;
     int grauSaida;
     int visitado;
-    int tempo;
+    int tempo[2];
     Aresta* listaArestas; // Lista encadeada de arestas
     struct Vertice* prox;
 } Vertice;
@@ -44,9 +44,11 @@ typedef struct Grafo {
 } Grafo;
 
 Grafo* criarGrafo();
+Grafo* inverteGrafo(Grafo* g);
 Animal* criarAnimal(char* nome, char* especie, char* habitat, char* dieta, char* tipo,int populacao);
+Animal* copiaAnimal(Animal* original);
 Vertice* criarVertice(Animal* animal);
-void adicionarVertice(Grafo* grafo, Animal* animal);
+Vertice* adicionarVertice(Grafo* grafo, Animal* animal);
 void adicionarAresta(Grafo* grafo, Vertice* predador, Vertice* presa, int peso);
 void imprimirGrafo(Grafo* grafo);
 void imprimirGrafoSintetico(Grafo *grafo);

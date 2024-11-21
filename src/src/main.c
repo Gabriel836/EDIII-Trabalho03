@@ -28,7 +28,7 @@ int main() {
     cmdBuff = strtok(buff, " ");
     specsBuff = strtok(NULL, " ");
 
-    int k, cmd = strtol(cmdBuff, NULL, 10);
+    int k, comp, cmd = strtol(cmdBuff, NULL, 10);
 
     char* fileR = specsBuff;
     char* nBuff;
@@ -59,11 +59,19 @@ int main() {
         break;
     case 12:
 
-        k = contagemCiclos(g);
+        k = contagemCiclos(g, &comp);
         printf("Quantidade de ciclos: %d\n", k);
 
         break;
     case 13:
+
+        k = contagemCiclos(g, &comp);
+        if(comp != 1) {
+            printf("Nao, o grafo nao e fortemente conexo e possui %d componentes.\n", comp);
+        }
+        else {
+            printf("Sim, o grafo e fortemente conexo e possui %d componente.\n", comp);
+        }
 
         break;
     case 14:
