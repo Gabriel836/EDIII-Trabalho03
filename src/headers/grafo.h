@@ -17,30 +17,31 @@ typedef struct Animal {
     int populacao;
 } Animal;
 
-// Estrutura para representar um vértice
-struct Vertice; // Forward declaration
+struct Vertice; //Declaração prévia de Vertice
 
-// Estrutura para representar uma aresta (conexão)
+//Estrutura para representar uma aresta (conexão)
 typedef struct Aresta {
-    struct Vertice* destino; // Agora aponta para um vértice
+    struct Vertice* destino;
     int peso;
     struct Aresta* prox;
 } Aresta;
 
-// Estrutura para representar um vértice
+//Estrutura para representar um vértice
 typedef struct Vertice {
     Animal* animal;
     int grauEntrada;
     int grauSaida;
     int visitado;
     int tempo;
-    Aresta* listaArestas; // Lista encadeada de arestas
+    int custoCaminho;
+    struct Vertice* predecessor;
+    Aresta* listaArestas; //Lista encadeada de arestas
     struct Vertice* prox;
 } Vertice;
 
-// Estrutura para representar um grafo
+//Estrutura para representar um grafo
 typedef struct Grafo {
-    Vertice* listaVertices; // Lista encadeada de vértices
+    Vertice* listaVertices; //Lista encadeada de vértices
 } Grafo;
 
 Grafo* criarGrafo();

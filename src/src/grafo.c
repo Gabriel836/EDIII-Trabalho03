@@ -29,14 +29,15 @@ Vertice* criarVertice(Animal* animal) {
     novoVertice->grauEntrada = 0;
     novoVertice->grauSaida = 0;
     novoVertice->visitado = 0;
+    novoVertice->custoCaminho = 0;
+    novoVertice->predecessor = NULL;
     novoVertice->listaArestas = NULL;
     novoVertice->prox = NULL;
     return novoVertice;
 }
 
-// Função para adicionar um vértice ao grafo
 void adicionarVertice(Grafo* grafo, Animal* animal) {
-    // Cria o novo vértice
+    //Aloca o novo vértice
     Vertice* novoVertice = criarVertice(animal);
     Vertice *prox, *ant;
 
@@ -53,7 +54,7 @@ void adicionarVertice(Grafo* grafo, Animal* animal) {
         novoVertice->prox = ant;
         return;
     }
-    //Inserção do vértice, em ordem alfabética
+    //Inserção do vértice em ordem alfabética
     else {
         prox = ant->prox;
         while(1) {
@@ -168,7 +169,8 @@ void buscarVerticePorNome(Grafo* grafo, char* nome, Vertice **ptr_vert) {
         v = v->prox;
     }
 
-    return; // Não encontrou o vértice
+    *ptr_vert = NULL; // Não encontrou o vértice
+    return;
 }
 
 void imprimirAnimal(const Animal* animal) {
