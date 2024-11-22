@@ -19,12 +19,9 @@ int contaComponentes(Grafo *g) {
     ListaString *extra = criaListaStrings();
     Grafo *invG = inverteGrafo(g);
 
-    //imprimirGrafo(invG);
-
     // Busca DFS no grafo, gera lista de tempo de morte dos vertices
     contagemCiclos(g, li, &lixo);
-    //printf("\n\nlista antes: \n");
-    //imprimeListaStrings(li);
+
     li = inverteLista(li);
 
 
@@ -40,6 +37,7 @@ int contaComponentes(Grafo *g) {
 
     deletaListaStrings(li);
     deletaListaStrings(extra);
+    deletaGrafo(invG);
 
     return comp;
 }

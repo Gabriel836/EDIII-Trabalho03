@@ -55,5 +55,7 @@ void imprimirGrafo(Grafo* grafo);
 void imprimirGrafoSintetico(Grafo *grafo);
 void imprimirAnimal(const Animal* animal);
 void buscarVerticePorNome(Grafo* grafo, char* nome, Vertice **ptr_vert);
+void comparaGrafo(Grafo *g1, Grafo *g2);
+int deletaGrafo(Grafo *grafo);
 
 #endif

@@ -9,6 +9,8 @@ Grafo* criarGrafo() {
     return grafo;
 }
 
+
+// Função para inversão do grafo
 Grafo* inverteGrafo(Grafo* g) {
     Vertice *v, *novaOrigem, *novoDestino, *busca;
     Aresta *a;
@@ -17,24 +19,22 @@ Grafo* inverteGrafo(Grafo* g) {
     g_inv = criarGrafo();
     g_inv->listaVertices = NULL;
 
-    //imprimirGrafo(g);
-
 
     char nome[MAX_STR];
 
+    // Começa copiando todos os vértices para o novo grafo
     for(v = g->listaVertices; v != NULL; v = v->prox) {
         copia = copiaAnimal(v->animal);
         adicionarVertice(g_inv, copia);
     }
 
+    // Adicionamos arestas invertendo-as
     for(v = g->listaVertices; v != NULL; v = v->prox) {
         buscarVerticePorNome(g_inv, v->animal->nome, &novoDestino);
 
-        //printf("novo destino: %s\n", novoDestino->animal->nome);
         if(novoDestino != NULL) {
             for(a = v->listaArestas; a != NULL; a = a->prox) {
                 buscarVerticePorNome(g_inv, a->destino->animal->nome, &novaOrigem);
-                //printf("origem: %s\n", novaOrigem->animal->nome);
                 adicionarAresta(g_inv, novaOrigem, novoDestino, novoDestino->animal->populacao);
             }
         }
@@ -165,7 +165,7 @@ void adicionarAresta(Grafo* grafo, Vertice* predador, Vertice* presa, int peso) 
     return;
 }
 
-// Função para imprimir o grafo
+// Função para imprimir o grafo, evidencia as arestas (DEBUG)
 void imprimirGrafo(Grafo* grafo) {
     Vertice *v;
     Aresta *a;
@@ -180,6 +180,7 @@ void imprimirGrafo(Grafo* grafo) {
     }
 }
 
+// Função para imprimir o grafo na forma sintética.
 void imprimirGrafoSintetico(Grafo *grafo) {
     Vertice *v;
     Aresta *a;
@@ -198,6 +199,18 @@ void imprimirGrafoSintetico(Grafo *grafo) {
             a->destino->animal->nome,
             a->peso);
         }
+    }
+}
+
+// Compara os vértices de dois grafos, g1 corresponde ao grafo original (DEBUG)
+void comparaGrafo(Grafo *g1, Grafo *g2) {
+    Vertice *v, *u;
+
+    for(v = g1->listaVertices; v != NULL; v = v->prox) {
+        buscarVerticePorNome(g2, v->animal->nome, &u);
+        if(u == NULL) printf("nao encotrado\n.");
+        else printf("encontrado\n");
+        u = NULL;
     }
 }
 
@@ -220,6 +233,36 @@ void buscarVerticePorNome(Grafo* grafo, char* nome, Vertice **ptr_vert) {
 
     *ptr_vert = NULL; // Não encontrou o vértice
     return;
+}
+
+// Deleta grafo
+int deletaGrafo(Grafo *grafo) {
+    if(grafo == NULL) return 0;
+    if(grafo->listaVertices == NULL) {
+        free(grafo);
+        return 0;
+    }
+    
+    Vertice *vAtual, *vProx;
+    Aresta *aAtual, *aProx;
+
+    vAtual = grafo->listaVertices;
+    while(vAtual != NULL) {
+        vProx = vAtual->prox;
+        aAtual = vAtual->listaArestas;
+
+        while(aAtual != NULL) {
+            aProx = aAtual->prox;
+            free(aAtual);
+            aAtual = aProx;
+        }
+
+        free(vAtual->animal);
+        free(vAtual);
+        vAtual = vProx;
+    }
+    free(grafo);
+    return 0;
 }
 
 void imprimirAnimal(const Animal* animal) {

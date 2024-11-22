@@ -42,30 +42,23 @@ void DFS(Vertice *v, ListaString *li, int *counter, int *inf, int *ciclos) {
     v->visitado = 1;
     v->tempo = *counter;
 
-    //printf("entrando em %s\n", v->animal->nome);
-
+    // Vertice sem descendentes, retorna.
     if(v->listaArestas == NULL) {
-        //printf("nao tem descendentes, voltando! - morte de %s\n", v->animal->nome);
-        
+        insereNoStringsDireto(li, v->animal->nome);
         return;
     } 
 
     for(prox = v->listaArestas; prox != NULL; prox = prox->prox) {
-        //printf("tentando ir para %s :", prox->destino->animal->nome);
+        // Verifica se o vértice descendente ja foi visitado nessa iterção da sub-arvore
         if(prox->destino->visitado && prox->destino->tempo > *inf) {
-            //printf("ja visitei!(ciclo)\n");
             (*ciclos)++;
             continue;
         }
         else if(prox->destino->visitado == 0) {
-            //printf("indo!\n");
             DFS(prox->destino, li, counter, inf, ciclos);
         }
-        else {
-        //printf("ja visitei anteriormente\n");
-        }
     }
-    //printf("morte do vertice %s, f\n", v->animal->nome);
+    // Todos os descendentes verificados, retorna
     insereNoStringsDireto(li, v->animal->nome);
     return;
 }

@@ -122,6 +122,7 @@ int main() {
         break;
     }
 
+    deletaGrafo(g);
     fclose(dinoDataBin);
     deletaListaStrings(li);
 
