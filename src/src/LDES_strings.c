@@ -7,38 +7,38 @@ ListaString* criaListaStrings() {
     ListaString *li;
     li = (ListaString*)malloc(sizeof(ListaString));
 
-    li->inicio = NULL;
-    li->n_elem = 0;
+    li->inicio = NULL; //Inicializa a lista vazia
+    li->n_elem = 0; // efine o número de elementos como 0
     return li;
 }
 
-//Inserção ordenada na lista encadeada
 int insereNoStringsOrdenado(ListaString *li, char *string) {
-
-    //Ponteiro da lista Nulo
+    //Verifica se a lista é válida
     if(li == NULL) return -1;
 
-    if(presenteNaLista(li, string) != NULL) return 0;
+    if(presenteNaLista(li, string) != NULL) return 0; //Verifica se a string já está na lista
 
-    //Criando no
+    //Cria um novo nó
     NoString *ptr_no = (NoString*)malloc(sizeof(NoString));
     ptr_no->prox = NULL;
     strcpy(ptr_no->string, string);
-    //Ponteiros auxiliares
+
+    //Ponteiros auxiliares para percorrer a lista
     NoString *ant, *prox;
 
-    //Lista Vazia
-    if(li->inicio == NULL) li->inicio = ptr_no;
-
+    //Caso a lista esteja vazia
+    if(li->inicio == NULL) li->inicio = ptr_no; //Insere no ínicio
     else {
         ant = li->inicio;
         prox = ant->prox;
 
+        //Caso a string seja menor que o primeiro elemento
         if(strcmp(ptr_no->string, ant->string) < 0) {
             li->inicio = ptr_no;
             ptr_no->prox = ant;
         }
         else {
+            //Insere a string na posição correta
             while(1) {
                 if(prox == NULL || strcmp(ptr_no->string, prox->string) < 0) {
                     ant->prox = ptr_no;
@@ -50,48 +50,51 @@ int insereNoStringsOrdenado(ListaString *li, char *string) {
             }
         }
     }
-    li->n_elem += 1;
+    li->n_elem += 1; //Incrementa o número de elementos na lista
     return 0;
 }
 
 int insereNoStringsDireto(ListaString *li, char *string) {
-    if(li == NULL) return -1;
+    if(li == NULL) return -1; //Verifica se a lista é válida
 
-    if(presenteNaLista(li, string) != NULL) return 0;
+    if(presenteNaLista(li, string) != NULL) return 0; //Verifica se a string já está na lista
 
-    //Criando no
+    //Cria um novo nó
     NoString *ptr_no = (NoString*)malloc(sizeof(NoString));
     ptr_no->prox = NULL;
     strcpy(ptr_no->string, string);
+
     //Ponteiros auxiliares
     NoString *ant, *prox;
 
-    //Lista vazia
-    if(li->inicio == NULL) li->inicio = ptr_no;
-
+    //Caso a lista esteja vazia
+    if(li->inicio == NULL) li->inicio = ptr_no; //Insere no íncio
     else {
+        //Percorre a lista até o último elemento
         for(ant = li->inicio; ant->prox != NULL; ant = ant->prox) continue;
-        ant->prox = ptr_no;
+        ant->prox = ptr_no; //Adiciona o novo nó no final
     }
-    li->n_elem += 1;
+    li->n_elem += 1; //Incrementa o número de elementos na lista
     return 0;
 }
 
 // Modifica a lista passada por parametro
 ListaString* inverteLista(ListaString *li) {
-    if(li == NULL) return NULL;
+    if(li == NULL) return NULL; //Verifica se a lista é válida
 
     int i, j;
-    ListaString *invertida = criaListaStrings();
+    ListaString *invertida = criaListaStrings(); //Cria uma nova lista para armazenar os elementos invertidos
     invertida->inicio = NULL;
     invertida->n_elem = li->n_elem;
 
     NoString *atual = li->inicio;
 
     for(i = li->n_elem-1; i >= 0; i--) {
+        //Percorre a lista até o elemento atual
         for(j = 0; j < i; j++) {
             atual = atual->prox;
         }
+        //Insere o elemento no início da nova lista
         insereNoStringsDireto(invertida, atual->string);
         atual = li->inicio;
     }
@@ -100,7 +103,7 @@ ListaString* inverteLista(ListaString *li) {
 
 //Remoção da lista
 int deletaListaStrings(ListaString *li) {
-    //Ponteiro da lista Nulo
+    // Verifica se a lista é válida
     if(li == NULL) return -1;
     if(li->inicio == NULL) {
         free(li);
@@ -111,21 +114,19 @@ int deletaListaStrings(ListaString *li) {
     atual = li->inicio;
     prox = atual->prox;
 
-    do {
+    do { //Libera cada nó da lista
         free(atual);
         atual = prox;
         if(atual != NULL) prox = atual->prox;
     }
     while(atual != NULL);
 
-    free(li);
+    free(li); //Libera a estrutura principal da lista
 
     return 0;
 }
 
-//Printa Lista
 int imprimeListaStrings(ListaString *li) {
-    //Ponteiro de lista Nulo
     if(li == NULL) return -1;
     if(li->inicio == NULL) {
         printf("ERRO: LISTA VAZIA\n");
@@ -142,8 +143,6 @@ int imprimeListaStrings(ListaString *li) {
     return 0;
 }
 
-
-//Verifica se a lista esta vazia
 int listaVazia(ListaString *li) {
     //Ponteiro de lista Nulo
     if(li == NULL) return -1;
@@ -153,13 +152,12 @@ int listaVazia(ListaString *li) {
     else return 0;
 }
 
-//Verifica se a string esta na lista
 NoString* presenteNaLista(ListaString *li, char *str) {
     NoString *atual = li->inicio;
 
     while(atual != NULL) {
-        if(!strcmp(atual->string, str)) return atual;
+        if(!strcmp(atual->string, str)) return atual; //Compara as strings
         atual = atual->prox;
     }
-    return NULL;
+    return NULL; //Retorna NULL se a string não for encontrada
 }

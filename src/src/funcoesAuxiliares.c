@@ -3,18 +3,7 @@
 #include "grafo.h"
 #include "funcoesAuxiliares.h"
 
-Reg* criarRegistro(char* nome, char* especie, char* habitat,
-                    char* dieta, char* food, char* tipo, const int populacao) {
-    Reg* novoRegistro = (Reg*)calloc(1, sizeof(Reg));
-    strcpy(novoRegistro->data.name, nome);
-    strcpy(novoRegistro->data.species, especie);
-    strcpy(novoRegistro->data.habitat, habitat);
-    strcpy(novoRegistro->data.diet, dieta);
-    strcpy(novoRegistro->data.type, tipo);
-    strcpy(novoRegistro->data.food, food);
-    novoRegistro->data.population = populacao;
-    return novoRegistro;
-}
+//===Funções abaixo foram retiradas do primeiro trbalho (escrito em inglês) e, por isso, não estão traduzidas===
 
 int readVariableFields(char* ptrStr, char *ptrDest)
 {
@@ -68,35 +57,6 @@ int readRegister(FILE *fp, Reg *regPtr)
     return 0;
 }
 
-int readRegisterSaveVertex(FILE *fp, Reg** NewReg, int RRN)
-{
-    Reg reg;
-    int ret;
-
-    fseek(fp, DISK_PAGE_SIZE, SEEK_SET); //Jumps the first page (header)
-    fseek(fp, RRN*REGISTER_SIZE, SEEK_CUR); //Moves the pointer to the register position
-
-    //Read the data and stores in 'reg'
-    ret = readRegister(fp, &reg);
-    if(ret == -1 || ret == 2) //If 'readRegister' returns a error, returns
-        return ret;
-    
-    *NewReg = criarRegistro(reg.data.name, reg.data.species, reg.data.habitat, reg.data.diet, reg.data.food, reg.data.type, reg.data.population);
-/*
-    printf("Nome: %s\n", NewReg->data.name);
-    printf("Especie: %s\n", NewReg->data.species);
-    if(strlen(NewReg->data.type)>0)
-        printf("Tipo: %s\n", NewReg->data.type);
-    printf("Dieta: %s\n", NewReg->data.diet);
-    if(strlen(NewReg->data.habitat)>0)
-        printf("Lugar que habitava: %s\n", NewReg->data.habitat);
-    printf("Populacao: %d\n", NewReg->data.population);
-    printf("Comida: %s", reg.data.food);
-    printf("\n");
-*/
-    return 0;
-}
-
 void removequotes(char *str)
 {
     int size;
@@ -119,10 +79,6 @@ void removequotes(char *str)
 
 void printFileErrorMessage() {
     printf("Falha no processamento do arquivo.\n");
-}
-
-void printRegNotFoundMessage() {
-    printf("Registro inexistente.\n");
 }
 
 int checkFileExistence(FILE* fp) {
@@ -149,67 +105,77 @@ int checkFileConsistency(FILE* fp) {
     return 0;
 }
 
-void imprimirRegistro(Reg* NewReg) {
-    printf("==========================\n");
-    printf("Nome: %s\n", NewReg->data.name);
-    printf("Especie: %s\n", NewReg->data.species);
-    if(strlen(NewReg->data.type)>0)
-        printf("Tipo: %s\n", NewReg->data.type);
-    printf("Dieta: %s\n", NewReg->data.diet);
-    if(strlen(NewReg->data.habitat)>0)
-        printf("Lugar que habitava: %s\n", NewReg->data.habitat);
-    printf("Populacao: %d\n", NewReg->data.population);
-    printf("Comida: %s", NewReg->data.food);
-    printf("\n==========================\n");
-    printf("\n");
+//===As funções abaixo foram criadas ou adaptadas para este trabalho e, por isso, encontram-se em português===
 
-    return;
+Reg* criarRegistro(char* nome, char* especie, char* habitat,
+                    char* dieta, char* food, char* tipo, const int populacao) {
+    Reg* novoRegistro = (Reg*)calloc(1, sizeof(Reg)); //Aloca um novo registro
+
+    //Inicializa os campos do registro
+    strcpy(novoRegistro->data.name, nome);
+    strcpy(novoRegistro->data.species, especie);
+    strcpy(novoRegistro->data.habitat, habitat);
+    strcpy(novoRegistro->data.diet, dieta);
+    strcpy(novoRegistro->data.type, tipo);
+    strcpy(novoRegistro->data.food, food);
+    novoRegistro->data.population = populacao;
+    
+    return novoRegistro;
 }
 
-int imprimeVertices(Grafo *g) {
-    Vertice *atual;
+int readRegisterSaveVertex(FILE *fp, Reg** NewReg, int RRN)
+{
+    Reg reg;
+    int ret;
 
-    printf("Imprimindo Grafo:\n");
+    fseek(fp, DISK_PAGE_SIZE, SEEK_SET); //Pula a primeira página (cabeçalho)
+    fseek(fp, RRN*REGISTER_SIZE, SEEK_CUR); //Move o ponteiro para a posição do registro
 
-    if(g->listaVertices == NULL) {
-        printf("Grafo vazio\n");
-        return -1;
-    }
+    //Lê o registro
+    ret = readRegister(fp, &reg);
+    if(ret == -1 || ret == 2) //Se 'readRegister' retorna um erro, retorna-o
+        return ret;
+    
+    *NewReg = criarRegistro( //Cria o registro
+        reg.data.name, 
+        reg.data.species, 
+        reg.data.habitat, 
+        reg.data.diet, 
+        reg.data.food, 
+        reg.data.type, 
+        reg.data.population);
 
-    atual = g->listaVertices;
-    while(atual != NULL) {
-        printf("%s\n", atual->animal->nome);
-        atual = atual->prox;
-    }
     return 0;
 }
 
-//Extrai nomes da entrada do comando [11]
 void extraiNomes(char* in, char* out) {
     char c;
     int i = 0, j = 0;
 
     c = in[0];
-    while(c != '\"') {
-        i++;
+    while(c != '\"') { //Avança até encontrar o primeiro caractere de aspas
+        i++; //Move para o próximo caractere após a aspas
         c = in[i];
     }
+
+    //Processa a string de entrada até o final
     while (c != '\0') {
+        // Quando encontra uma aspas, inicia a extração de caracteres
         if(c == '\"') {
-            i++;
+            i++; //Move para o próximo caractere após a aspas
             c = in[i];
-            do {
+            do { //Copia caracteres dentro das aspas para a string de saída
                 out[j] = c;
                 i++;
                 j++;
                 c = in[i];
             }
-            while(c != '\"');
-            out[j] = '#';
+            while(c != '\"'); //Continua até encontrar outra aspas
+            out[j] = '#'; //Adiciona '#' na string de saída após cada trecho extraído (substitui espaço)
             j++;
         }
-        i++;
+        i++; //Avança para o próximo caractere
         c = in[i];
     }
-    out[j] = '\0';
+    out[j] = '\0'; //Finaliza a string de saída com o caractere nulo ('\0')
 }

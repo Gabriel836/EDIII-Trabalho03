@@ -10,6 +10,8 @@
 #include <stdio.h>
 #include "grafo.h"
 
+//===Funções e structs abaixo foram retiradas do primeiro trbalho (escrito em inglês) e, por isso, não estão traduzidas===
+
 /// @brief Type that represents the fixed and variable data of a species.
 typedef struct dino {
     int population;
@@ -31,8 +33,6 @@ typedef struct reg {
     Dino data;
 } Reg;
 
-Reg* criarRegistro(char* nome, char* especie, char* habitat, char* dieta, char* food, char* tipo, const int populacao);
-
 /// @brief Reads a single variable field and stores in a destination string. Reads a single field per call.
 /// @param ptrStr Pointer (string) with all/the rest of the variable fields to read.
 /// @param ptrDest Destination string (where the separate field will be stored).
@@ -45,17 +45,8 @@ int readVariableFields(char* ptrStr, char *ptrDest);
 /// @return Returns -1 if register was removed, 2 if the record was not found in the file (reached EOF) and 0 if it was read.
 int readRegister(FILE *fp, Reg *regPtr);
 
-/// @brief prints all the data fields of the register.
-/// @param fp Pointer to a binary file (open in reading mode).
-/// @param RRN RRN of the register to be printed.
-/// @return Returns -1 if register was removed, 2 if the record was not found in the file (reached EOF) and 0 if it was printed;
-int readRegisterSaveVertex(FILE *fp, Reg** NewReg, int RRN);
-
 /// @brief Prints a error message warning that there's a error with the sent file. 
 void printFileErrorMessage();
-
-/// @brief Prints a message warning that the search found no registers.
-void printRegNotFoundMessage();
 
 /// @brief Check if the file pointer exists.
 /// @param fp Pointer to a binary file (open in reading mode).
@@ -67,18 +58,21 @@ int checkFileExistence(FILE* fp);
 /// @return Return -1 if the file is inconsistent and 0 otherwise.
 int checkFileConsistency(FILE* fp);
 
-/// @brief Remove quotes, new-lines and carriage-returns.
-/// @param str String that will be manipulated.
-void removequotes(char *str);
-void imprimirRegistro(Reg* NewReg);
+//===As funções abaixo foram criadas ou adaptadas para este trabalho e, por isso, encontram-se em português===
 
-/// @brief Prints graph vertex.
-/// @param g Graph pointer
-int imprimeVertices(Grafo *g);
+/// @brief Aloca um novo registro com os dados fornecidos.
+/// @return Retorna um ponteiro para o registro criado.
+Reg* criarRegistro(char* nome, char* especie, char* habitat, char* dieta, char* food, char* tipo, const int populacao);
 
+/// @brief Lê um registro do arquivo binário e o salva para ser usado em um vertíce.
+/// @param fp Ponteiro para um arquivo binário (aberto em modo leitura binária).
+/// @param RRN RRN do registro a ser salvo.
+/// @return Retorna -1 se o registr foi removido, 2 se o registr não foi encontrado (chegou ao EOF) e 0 se fo salvo.
+int readRegisterSaveVertex(FILE *fp, Reg** NewReg, int RRN);
 
-/// @brief Extracts names from commnd [11] input.
-/// @param in Input string.
-/// @param out Output string.
+/// @brief Retira aspas e substitui espaços por '#' em uma string.
+/// @param in String de entrada.
+/// @param out String de saída.
 void extraiNomes(char* in, char* out);
+
 #endif

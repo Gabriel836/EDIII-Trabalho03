@@ -8,16 +8,12 @@ Gabriel Dezejácomo Maruschi - 14571525
 #include <locale.h>
 #include "funcoesPrincipais.h"
 #include "grafo.h"
-#include "funcoesAnalise.h"
+#include "LDES_strings.h"
 #include "funcoesAuxiliares.h"
-#include "DFS.h"
-#include "dijkstra.h"
-#include "kosaraju.h"
 
 #define MAX_INPUT 300
 
 int main() {
-
 
     setlocale(LC_ALL, "Portuguese");
     FILE* dinoDataBin;
@@ -59,7 +55,7 @@ int main() {
     case 11:
         char conjuntoBuscas[MAX_INPUT];
         
-        extraiNomes(buff, conjuntoBuscas);
+        extraiNomes(buff, conjuntoBuscas); //Retira aspas e substitui espaços por # da entrada
         value = strtok(conjuntoBuscas, "#");
         while(value != NULL) {
             listaPredadores(g, value); //Lista os predadores de uma presa
@@ -89,7 +85,6 @@ int main() {
         nBuff = strtok(NULL, " "); //Extrai número de inputs ("origem" "destino")
         n = strtol(nBuff, NULL, 10); //atoi
 
-        //Retira aspas e substitui espaços por # da entrada
         char inputBuff[MAX_INPUT];
         extraiNomes(buff, inputBuff);
 
@@ -122,9 +117,9 @@ int main() {
         break;
     }
 
-    deletaGrafo(g);
-    fclose(dinoDataBin);
-    deletaListaStrings(li);
+    fclose(dinoDataBin); //Fecha arquivo binário
+    deletaGrafo(g); //Dá free em todas as arestas e vertíces do grafo
+    deletaListaStrings(li); //Dá free em todos os elementos da lista
 
     return 0;
 }
