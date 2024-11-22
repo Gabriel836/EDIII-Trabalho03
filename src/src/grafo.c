@@ -10,24 +10,33 @@ Grafo* criarGrafo() {
 }
 
 Grafo* inverteGrafo(Grafo* g) {
-    Vertice *v, *novaOrigem, *novoDestino;
+    Vertice *v, *novaOrigem, *novoDestino, *busca;
     Aresta *a;
-    Animal *copiaO, *copiaD;
+    Animal *copia;
     Grafo* g_inv;
+    g_inv = criarGrafo();
+    g_inv->listaVertices = NULL;
+
+    //imprimirGrafo(g);
+
 
     char nome[MAX_STR];
 
     for(v = g->listaVertices; v != NULL; v = v->prox) {
+        copia = copiaAnimal(v->animal);
+        adicionarVertice(g_inv, copia);
+    }
 
-        copiaO = copiaAnimal(v->animal);
-        novoDestino = adicionarVertice(g_inv, copiaO);
+    for(v = g->listaVertices; v != NULL; v = v->prox) {
+        buscarVerticePorNome(g_inv, v->animal->nome, &novoDestino);
 
-        for(a = v->listaArestas; a != NULL; a = a->prox) {
-
-            copiaD = copiaAnimal(a->destino->animal);
-            novaOrigem = adicionarVertice(g_inv, copiaD);
-
-            adicionarAresta(g_inv, novaOrigem, novoDestino, novoDestino->animal->populacao);
+        //printf("novo destino: %s\n", novoDestino->animal->nome);
+        if(novoDestino != NULL) {
+            for(a = v->listaArestas; a != NULL; a = a->prox) {
+                buscarVerticePorNome(g_inv, a->destino->animal->nome, &novaOrigem);
+                //printf("origem: %s\n", novaOrigem->animal->nome);
+                adicionarAresta(g_inv, novaOrigem, novoDestino, novoDestino->animal->populacao);
+            }
         }
     }
     return g_inv;
@@ -68,6 +77,8 @@ Vertice* criarVertice(Animal* animal) {
     novoVertice->grauEntrada = 0;
     novoVertice->grauSaida = 0;
     novoVertice->visitado = 0;
+    novoVertice->custoCaminho = 0;
+    novoVertice->predecessor = NULL;
     novoVertice->listaArestas = NULL;
     novoVertice->prox = NULL;
     return novoVertice;
@@ -90,7 +101,7 @@ Vertice* adicionarVertice(Grafo* grafo, Animal* animal) {
         grafo->listaVertices = novoVertice;
         novoVertice->prox = ant;
     }
-    //Inserção do vértice, em ordem alfabética
+    //Inserção do vértice em ordem alfabética
     else {
         prox = ant->prox;
         while(1) {
@@ -98,7 +109,7 @@ Vertice* adicionarVertice(Grafo* grafo, Animal* animal) {
                 if(prox == NULL || strcmp(novoVertice->animal->nome, prox->animal->nome) < 0) {
                     ant->prox = novoVertice;
                     novoVertice->prox = prox;
-                    return;
+                    return novoVertice;
                 }
             }
             ant = ant->prox;
@@ -162,8 +173,9 @@ void imprimirGrafo(Grafo* grafo) {
         printf("Animal: %s\n", v->animal->nome);
         printf("  Arestas:");
         for (a = v->listaArestas; a != NULL; a = a->prox) {
-            printf(" -> %s (peso: %d)", a->destino->animal->nome, a->peso);
+            printf(" -> %s (visitado: %d)", a->destino->animal->nome, a->destino->visitado);
         }
+        printf(" -- pop: %d", v->animal->populacao);
         printf("\n");
     }
 }
@@ -206,7 +218,8 @@ void buscarVerticePorNome(Grafo* grafo, char* nome, Vertice **ptr_vert) {
         v = v->prox;
     }
 
-    return; // Não encontrou o vértice
+    *ptr_vert = NULL; // Não encontrou o vértice
+    return;
 }
 
 void imprimirAnimal(const Animal* animal) {

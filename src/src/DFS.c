@@ -6,18 +6,16 @@
 
 //DFS e contagem de ciclos
 
-int contagemCiclos(Grafo *grafo, int *comp) {
-    int *counter, *pos, *inf, *ciclos, i = 0, ant;
+int contagemCiclos(Grafo *grafo, ListaString *li, int *comp) {
+    int *counter, *pos, *inf, *ciclos, i = 0;
 
     *comp = 0;
 
     counter = (int*)calloc(1, sizeof(int));
     ciclos = (int*)calloc(1, sizeof(int));
-    pos = (int*)calloc(1, sizeof(int));
 
     *ciclos = 0;
     *counter = 0;
-    *pos = 0;
 
     inf = (int*)calloc(1, sizeof(int));
 
@@ -28,13 +26,8 @@ int contagemCiclos(Grafo *grafo, int *comp) {
 
         i++;
         *inf = *counter;
-        ant = *ciclos;
 
-        DFS(v, counter, pos, inf, ciclos);
-
-        if(*ciclos > ant) {
-            (*comp)++;
-        }
+        DFS(v, li, counter, inf, ciclos);
     }
 
     return *ciclos;
@@ -42,29 +35,37 @@ int contagemCiclos(Grafo *grafo, int *comp) {
 
 
 // Função recursiva DFS.
-void DFS(Vertice *v, int *counter, int *pos, int *inf, int *ciclos) {
+void DFS(Vertice *v, ListaString *li, int *counter, int *inf, int *ciclos) {
     Aresta* prox;
     (*counter)++;
-    (*pos)++;
 
     v->visitado = 1;
-    v->tempo[0] = *counter;
+    v->tempo = *counter;
 
-    if(v->listaArestas == NULL) return;
+    //printf("entrando em %s\n", v->animal->nome);
+
+    if(v->listaArestas == NULL) {
+        //printf("nao tem descendentes, voltando! - morte de %s\n", v->animal->nome);
+        
+        return;
+    } 
 
     for(prox = v->listaArestas; prox != NULL; prox = prox->prox) {
+        //printf("tentando ir para %s :", prox->destino->animal->nome);
         if(prox->destino->visitado && prox->destino->tempo > *inf) {
+            //printf("ja visitei!(ciclo)\n");
             (*ciclos)++;
-
-            printf("ciclo: %s -- %s\n", v->animal->nome, prox->destino->animal->nome);
             continue;
         }
-        else if(v->visitado == 0) {
-            printf("avanco: %s -> %s\n", v->animal->nome, prox->destino->animal->nome);
-            DFS(prox->destino, counter, pos, inf, ciclos);
+        else if(prox->destino->visitado == 0) {
+            //printf("indo!\n");
+            DFS(prox->destino, li, counter, inf, ciclos);
+        }
+        else {
+        //printf("ja visitei anteriormente\n");
         }
     }
-    (*pos)++;
-    v->tempo[1] = *pos;
+    //printf("morte do vertice %s, f\n", v->animal->nome);
+    insereNoStringsDireto(li, v->animal->nome);
     return;
 }

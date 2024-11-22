@@ -13,7 +13,7 @@ ListaString* criaListaStrings() {
 }
 
 //Inserção ordenada na lista encadeada
-int insereNoStrings(ListaString *li, char *string) {
+int insereNoStringsOrdenado(ListaString *li, char *string) {
 
     //Ponteiro da lista Nulo
     if(li == NULL) return -1;
@@ -52,6 +52,50 @@ int insereNoStrings(ListaString *li, char *string) {
     }
     li->n_elem += 1;
     return 0;
+}
+
+int insereNoStringsDireto(ListaString *li, char *string) {
+    if(li == NULL) return -1;
+
+    if(presenteNaLista(li, string) != NULL) return 0;
+
+    //Criando no
+    NoString *ptr_no = (NoString*)malloc(sizeof(NoString));
+    ptr_no->prox = NULL;
+    strcpy(ptr_no->string, string);
+    //Ponteiros auxiliares
+    NoString *ant, *prox;
+
+    //Lista vazia
+    if(li->inicio == NULL) li->inicio = ptr_no;
+
+    else {
+        for(ant = li->inicio; ant->prox != NULL; ant = ant->prox) continue;
+        ant->prox = ptr_no;
+    }
+    li->n_elem += 1;
+    return 0;
+}
+
+// Modifica a lista passada por parametro
+ListaString* inverteLista(ListaString *li) {
+    if(li == NULL) return NULL;
+
+    int i, j;
+    ListaString *invertida = criaListaStrings();
+    invertida->inicio = NULL;
+    invertida->n_elem = li->n_elem;
+
+    NoString *atual = li->inicio;
+
+    for(i = li->n_elem-1; i >= 0; i--) {
+        for(j = 0; j < i; j++) {
+            atual = atual->prox;
+        }
+        insereNoStringsDireto(invertida, atual->string);
+        atual = li->inicio;
+    }
+    return invertida;
 }
 
 //Remoção da lista

@@ -5,24 +5,29 @@ Gabriel Dezejácomo Maruschi - 14571525
 
 #include <stdio.h>
 #include <string.h>
+#include <locale.h>
 #include "funcoesPrincipais.h"
 #include "grafo.h"
 #include "funcoesAnalise.h"
 #include "funcoesAuxiliares.h"
 #include "DFS.h"
+#include "dijkstra.h"
+#include "kosaraju.h"
 
 #define MAX_INPUT 300
 
-
 int main() {
 
+
+    setlocale(LC_ALL, "Portuguese");
     FILE* dinoDataBin;
 
-    //Read and parse the input
+    //Leitura da string de entrada
     char buff[MAX_INPUT], secBuff[MAX_INPUT];
     fgets(buff, MAX_INPUT, stdin);
     buff[strcspn(buff, "\n")] = '\0';
     
+    //Separação dos campos função e arquivo da string de entrada 
     char* cmdBuff;
     char* specsBuff;
     cmdBuff = strtok(buff, " ");
@@ -31,13 +36,18 @@ int main() {
     int k, comp, cmd = strtol(cmdBuff, NULL, 10);
 
     char* fileR = specsBuff;
-    char* nBuff;
-    char *field, *value;
-    int n, size;
 
-    dinoDataBin = fopen(fileR, "rb");
+    dinoDataBin = fopen(fileR, "rb"); //Abertura do arquivo
+
+    //Variáveis auxiliares para leitura de entrada e retornos
+    char* nBuff;
+    char *value;
+    int n;
+
+    //Criação do grafo
     Grafo* g = criarGrafo();
-    n = preencherGrafo(g, dinoDataBin);
+    ListaString *li = criaListaStrings();
+    preencherGrafo(g, dinoDataBin); 
 
     switch (cmd)
     {
@@ -52,56 +62,68 @@ int main() {
         extraiNomes(buff, conjuntoBuscas);
         value = strtok(conjuntoBuscas, "#");
         while(value != NULL) {
-            listaPredadores(g, value);
+            listaPredadores(g, value); //Lista os predadores de uma presa
             value = strtok(NULL, "#");
         }
 
         break;
     case 12:
 
-        k = contagemCiclos(g, &comp);
+        k = contagemCiclos(g, li, &comp);
         printf("Quantidade de ciclos: %d\n", k);
 
         break;
     case 13:
 
-        k = contagemCiclos(g, &comp);
+        k = contaComponentes(g);
         if(comp != 1) {
-            printf("Nao, o grafo nao e fortemente conexo e possui %d componentes.\n", comp);
+            printf("Não, o grafo não é fortemente conexo e possui %d componentes.\n", k);
         }
         else {
-            printf("Sim, o grafo e fortemente conexo e possui %d componente.\n", comp);
+            printf("Sim, o grafo é fortemente conexo e possui %d componente.\n", k);
         }
 
         break;
     case 14:
 
+        nBuff = strtok(NULL, " "); //Extrai número de inputs ("origem" "destino")
+        n = strtol(nBuff, NULL, 10); //atoi
+
+        //Retira aspas e substitui espaços por # da entrada
+        char inputBuff[MAX_INPUT];
+        extraiNomes(buff, inputBuff);
+
+        char* origemBuff;
+        char* destinoBuff;
+
+        for(int i = 0; i < n; i++)
+        {
+            //Extrando o par de entradas "origem" "destino"
+            if (i == 0) {
+                origemBuff = strtok(inputBuff, "#");
+                destinoBuff = strtok(NULL, "#");
+            } 
+            else {
+                origemBuff = strtok(NULL, "#");
+                destinoBuff = strtok(NULL, "#");
+            }
+
+            int custo = dijkstra(g, origemBuff, destinoBuff); //Cálculo do menor custo
+            
+            if (custo == -1) {
+                printf("%s %s: CAMINHO INEXISTENTE\n", origemBuff, destinoBuff);
+            } else {
+                printf("%s %s: %d\n", origemBuff, destinoBuff, custo);
+            }
+        }   
+
         break;
     default:
         break;
     }
+
     fclose(dinoDataBin);
-/*
-    Grafo* grafo = criarGrafo();
+    deletaListaStrings(li);
 
-    Animal* leao = criarAnimal("leao", "gatinho gatus", "africa", "carnivoro", "gato", 20);
-    Animal* zebra = criarAnimal("zebra", "cavalo noir", "africa", "herbivoro", "juan", 30);
-
-    adicionarVertice(grafo, leao);
-    adicionarVertice(grafo, zebra);
-
-    adicionarAresta(grafo, "leao", "zebra", 30);
-
-    const char* nomeProcurado = "leao";
-    Vertice* verticeEncontrado = buscarVerticePorNome(grafo, nomeProcurado);
-
-    if (verticeEncontrado != NULL) {
-        printf("Vértice encontrado: %s\n", verticeEncontrado->animal->nome);
-    } else {
-        printf("Vértice com nome '%s' não encontrado.\n", nomeProcurado);
-    }
-
-    imprimirGrafo(grafo);
-*/
     return 0;
 }

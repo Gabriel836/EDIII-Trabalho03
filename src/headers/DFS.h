@@ -4,6 +4,6 @@
 #include <grafo.h>
 #include "LDES_strings.h"
 
-
-int contagemCiclos(Grafo *grafo, int *comp);
-void DFS(Vertice *v, int *counter, int *pos, int *inf, int *ciclos);
+//O uso da Lista de String é justificado na implementacao do algoritmo de Kosaraju
+int contagemCiclos(Grafo *grafo, ListaString *li, int *comp);
+void DFS(Vertice *v, ListaString *li, int *counter, int *inf, int *ciclos);

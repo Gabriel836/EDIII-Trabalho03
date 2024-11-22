@@ -18,7 +18,9 @@ typedef struct Lista_strings {
 
 ListaString* criaListaStrings();
 int insereNoStringsOrdenado(ListaString *li, char *string);
+int insereNoStringsDireto(ListaString *li, char *string);
 int deletaListaStrings(ListaString *li);
 int imprimeListaStrings(ListaString *li);
 int listaVazia(ListaString *li);
+ListaString* inverteLista(ListaString *li);
 NoString* presenteNaLista(ListaString *li, char *str);
